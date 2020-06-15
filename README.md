@@ -35,11 +35,15 @@ Instruction for downloading the SpaceNet data can be found on their [website](ht
 ## Environment Setup
 
 ### AWS Command Line Interface to Get Data
-The original data can be found in the [SpaceNet Challenge](https://spacenetchallenge.github.io/AOI_Lists/AOI_2_Vegas.html). To download the data requires AWS command line tools. See the AWS [docs](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2-mac.html) for more info.
+The original data can be found in the [SpaceNet Challenge](https://spacenet.ai/las-vegas/). To download the data requires AWS command line tools. See the AWS [docs](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2-mac.html) for more info.
 
 
-### Provision an Azure Deep Learning Virtual Machine
-You could train your models on a Deep Learning Virtual Machine ([DLVM](https://azuremarketplace.microsoft.com/en-ca/marketplace/apps/microsoft-ads.dsvm-deep-learning)) on Azure to get started quickly, where all the major deep learning frameworks, including PyTorch used in this repo, are installed and ready to use. These VMs are configured specifically for use with GPUs. Instructions for provisioning can be found [here](https://docs.microsoft.com/en-us/azure/machine-learning/data-science-virtual-machine/provision-deep-learning-dsvm). The code here has been used on a Ubuntu Linux DLVM, but you should be able to use it on a Windows DLVM with minor modifications to the commands such as those setting environment variable values. The commands on this page are for running in a Linux shell.
+### Google Collab
+We will be using [Google Colab Notebooks](https://colab.research.google.com/notebooks/intro.ipynb) for this tutorial. The benefits to using this are:
+
+1. It's free! (Including GPU)
+2. With Stanford account, we have unlimited Google Drive storage. Thus, we can upload large datasets into Google Drive which we can hook into Google Colab notebooks for easy exploration.
+3. Okay-ish development environment
 
 
 ### Additional Packages to Install
@@ -52,13 +56,9 @@ pip install shapely
 
 
 ### Data Storage Options
-For quick experimentations you could download your data to the OS disk, but this makes data transfer and sharing costly when you scale out.
+We will be using Google Drive to store data for this tutorial. This is because Stanford offers unlimited Google Drive storage and we can access our Google Drive folders seamlessly within Google Colab. 
 
-There are several options for storing the data while you perform computation on them in Azure. Here's a piece of [documentation](https://docs.microsoft.com/en-us/azure/storage/common/storage-decide-blobs-files-disks) to guide you through choosing among these, and here are the [pricing](https://azure.microsoft.com/en-us/pricing/details/storage/) information.
-
-If you are not planning on training models distributedly across several machines, you could attach a data disk to your VM. See [instructions](https://docs.microsoft.com/en-us/azure/virtual-machines/linux/attach-disk-portal) on attaching a data disk to a Linux VM. You can later re-attach this data disk to a more powerful VM, but it can only be attached to one machine at a time.
-
-For both Azure [Blob Storage](https://azure.microsoft.com/en-us/services/storage/blobs/) and [File Share](https://azure.microsoft.com/en-us/services/storage/files/), you can browse the files stored from any computer using the [Storage Explorer](https://azure.microsoft.com/en-us/features/storage-explorer/) desktop app. Both blob storage containers and file shares can be mounted on your VM so you can use them as if they were local disks. See instructions for mounting [blob storage](https://docs.microsoft.com/en-us/azure/storage/blobs/storage-how-to-mount-container-linux) and [file shares](https://docs.microsoft.com/en-us/azure/storage/files/storage-how-to-use-files-linux). Note however that such file systems have different performance for writing and deleting files than local file systems. Please refer to Azure Storage [performance targets](https://docs.microsoft.com/en-us/azure/storage/common/storage-scalability-targets?toc=%2fazure%2fstorage%2fqueues%2ftoc.json) for more information.
+Link to [Google Drive Folder](https://drive.google.com/drive/u/1/folders/104bv1Sn7UTaA4Y7A3xzQMwwcdGpH6ByV)
 
 
 
