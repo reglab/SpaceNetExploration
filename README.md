@@ -105,5 +105,7 @@ SpaceNet [road extraction](https://spacenetchallenge.github.io/Competitions/Comp
 
 Helpful [blog post](https://towardsdatascience.com/understanding-semantic-segmentation-with-unet-6be4f42d4b47) on understanding Semantic Segmentation with UNet
 
+1. Note the reason why it is called UNet is because there are two steps: encoder (downsamples, learns the WHAT) and a decoder (upsamples, learns the WHERE to get the pixel level classifications). Thus this follows a "U" shape.
+
 
 
