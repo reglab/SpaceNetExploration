@@ -38,7 +38,7 @@ Instruction for downloading the SpaceNet data can be found on their [website](ht
 The original data can be found in the [SpaceNet Challenge](https://spacenet.ai/las-vegas/). To download the data requires AWS command line tools. See the AWS [docs](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2-mac.html) for more info.
 
 
-### Google Collab
+### Google Colab
 We will be using [Google Colab Notebooks](https://colab.research.google.com/notebooks/intro.ipynb) for this tutorial. The benefits to using this are:
 
 1. It's free! (Including GPU)
