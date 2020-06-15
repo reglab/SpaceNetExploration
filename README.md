@@ -1,9 +1,9 @@
-*This repository was originally at https://github.com/aiforearth/SpaceNetExploration*. For other Microsoft AI for Earth repositories, search for the topic `#aiforearth` on GitHub or visit them [here](https://github.com/search?l=&q=user%3Amicrosoft+topic%3Aaiforearth&type=Repositories).
+*This repository is forked from https://github.com/yangsiyu007/SpaceNetExploration*. For the accompanying blog post from Microsoft AI Team, see [here](https://azure.microsoft.com/en-us/blog/how-to-extract-building-footprints-from-satellite-images-using-deep-learning/).
 
 # Building Footprint Extraction
 
 ## Overview
-This repository contains a walkthrough demonstrating how to perform semantic segmentation using convolutional neural networks (CNNs) on satellite images to extract the footprints of buildings. We show how to carry out the procedure on an Azure Deep Learning Virtual Machine (DLVM), which are GPU-enabled and have all major frameworks pre-installed so you can start model training straight-away. We use a subset of the data and labels from the [SpaceNet Challenge](http://explore.digitalglobe.com/spacenet), an online repository of freely available satellite imagery released to encourage the application of machine learning to geospatial data.
+This repository contains a walkthrough demonstrating how to perform semantic segmentation using convolutional neural networks (CNNs) on satellite images to extract the footprints of buildings. We show how to carry out the procedure on Google Colab Notebooks. We use a subset of the data and labels from the [SpaceNet Challenge](http://explore.digitalglobe.com/spacenet), an online repository of freely available satellite imagery released to encourage the application of machine learning to geospatial data.
 
 The blog post that first announced this sample project is [here](https://azure.microsoft.com/en-us/blog/how-to-extract-building-footprints-from-satellite-images-using-deep-learning/) on the Azure Blog.
 
@@ -11,13 +11,23 @@ The blog post that first announced this sample project is [here](https://azure.m
 ## Data
 
 ### SpaceNet Building Footprint Extraction Dataset
-The code in this repository was developed for training a semantic segmentation model (currently two variants of the U-Net are implemented) on the Vegas set of the SpaceNet building footprint extraction [data](https://spacenetchallenge.github.io/). This makes the sample code clearer, but it can be easily extended to take in training data from the four other locations.
+The code in this repository was developed for training a semantic segmentation model (currently two variants of the U-Net are implemented) on the Vegas set of the SpaceNet building footprint extraction [data](https://spacenet.ai/las-vegas/). Subsetting to just Vegas makes the sample code clearer, but it can be easily extended to take in training data from the four other locations.
+
+The above link will have the latest documentation. As of 2020-06-15, the following worked for me:
+
+```
+aws s3 cp s3://spacenet-dataset/spacenet/SN2_buildings/tarballs/SN2_buildings_train_AOI_2_Vegas.tar.gz . 
+
+aws s3 cp s3://spacenet-dataset/spacenet/SN2_buildings/tarballs/AOI_2_Vegas_Test_public.tar.gz .
+```
+
+However, note the organizers may change s3 paths so if that doesn't work refer to the original documentation.
 
 The organizers release a portion of this data as training data and the rest are held out for the purpose of the competitions they hold. For the experiments discussed here, we split the official training set 70:15:15 into our own training, validation and test sets. These are 39 GB in size as raw images in TIFF format with labels.
 
 
 ### Generate Input from Raw Data
-Instruction for downloading the SpaceNet data can be found on their [website](https://spacenetchallenge.github.io/). The authors provide a set of utilities to convert the raw images to a format that semantic segmentation models can take as input. The utilities are in this [repo](https://github.com/SpaceNetChallenge/utilities). Most of the functionalities you will need are in the `python` folder. Please read their instructions on the repo's [README](https://github.com/SpaceNetChallenge/utilities) to understand all the tools and parameters available. After using `python/createDataSpaceNet.py` from the utilities repo to process the raw data, the input image and its label look like the following:
+Instruction for downloading the SpaceNet data can be found on their [website](https://spacenet.ai/datasets/). The authors provide a set of utilities to convert the raw images to a format that semantic segmentation models can take as input. The utilities are in this [repo](https://github.com/SpaceNetChallenge/utilities). Most of the functionalities you will need are in the `python` folder. Please read their instructions on the repo's [README](https://github.com/SpaceNetChallenge/utilities) to understand all the tools and parameters available. After using `python/createDataSpaceNet.py` from the utilities repo to process the raw data, the input image and its label look like the following:
 
 ![Example of input image and its label](./visuals/sample_input_pair.png)
 
@@ -26,14 +36,6 @@ Instruction for downloading the SpaceNet data can be found on their [website](ht
 
 ### AWS Command Line Interface to Get Data
 The original data can be found in the [SpaceNet Challenge](https://spacenetchallenge.github.io/AOI_Lists/AOI_2_Vegas.html). To download the data requires AWS command line tools. See the AWS [docs](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2-mac.html) for more info.
-
-Note, actually it seems like the above link is outdated. For specific information on Las Vegas, see the updated site from [SpaceNet](https://spacenet.ai/las-vegas/). As of 2020-06-15, the following worked for me:
-
-```
-aws s3 cp s3://spacenet-dataset/spacenet/SN2_buildings/tarballs/SN2_buildings_train_AOI_2_Vegas.tar.gz . 
-
-aws s3 cp s3://spacenet-dataset/spacenet/SN2_buildings/tarballs/AOI_2_Vegas_Test_public.tar.gz .
-```
 
 
 ### Provision an Azure Deep Learning Virtual Machine
