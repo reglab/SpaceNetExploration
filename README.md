@@ -23,6 +23,19 @@ Instruction for downloading the SpaceNet data can be found on their [website](ht
 
 
 ## Environment Setup
+
+### AWS Command Line Interface to Get Data
+The original data can be found in the [SpaceNet Challenge](https://spacenetchallenge.github.io/AOI_Lists/AOI_2_Vegas.html). To download the data requires AWS command line tools. See the AWS [docs](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2-mac.html) for more info.
+
+Note, actually it seems like the above link is outdated. For specific information on Las Vegas, see the updated site from [SpaceNet](https://spacenet.ai/las-vegas/). As of 2020-06-15, the following worked for me:
+
+```
+aws s3 cp s3://spacenet-dataset/spacenet/SN2_buildings/tarballs/SN2_buildings_train_AOI_2_Vegas.tar.gz . 
+
+aws s3 cp s3://spacenet-dataset/spacenet/SN2_buildings/tarballs/AOI_2_Vegas_Test_public.tar.gz .
+```
+
+
 ### Provision an Azure Deep Learning Virtual Machine
 You could train your models on a Deep Learning Virtual Machine ([DLVM](https://azuremarketplace.microsoft.com/en-ca/marketplace/apps/microsoft-ads.dsvm-deep-learning)) on Azure to get started quickly, where all the major deep learning frameworks, including PyTorch used in this repo, are installed and ready to use. These VMs are configured specifically for use with GPUs. Instructions for provisioning can be found [here](https://docs.microsoft.com/en-us/azure/machine-learning/data-science-virtual-machine/provision-deep-learning-dsvm). The code here has been used on a Ubuntu Linux DLVM, but you should be able to use it on a Windows DLVM with minor modifications to the commands such as those setting environment variable values. The commands on this page are for running in a Linux shell.
 
@@ -48,7 +61,7 @@ For both Azure [Blob Storage](https://azure.microsoft.com/en-us/services/storage
 
 
 ## Model Training
-We tackle the problem of outlining building footprints in satellite images by applying a semantic segmentation model to first classify each pixel as background, building, or boundary of buildings. The [U-Net](https://lmb.informatik.uni-freiburg.de/people/ronneber/u-net/) is used for this task. There are two variants of the U-Net implemented in the [models](./models) directory, differing by the sizes of filters used. The baseline U-Net is a similar version as used by the winner of the SpaceNet Building Footprint competition [XD\_XD](https://github.com/SpaceNetChallenge/BuildingDetectors_Round2/tree/master/1-XD_XD). We referenced several open source implementations, noted in the relevant files.
+We tackle the problem of outlining building footprints in satellite images by applying a semantic segmentation model to first classify each pixel as background, building, or boundary of buildings. The [U-Net](https://lmb.informatik.uni-freiburg.de/people/ronneber/u-net/) is used for this task. There are two variants of the U-Net implemented in the [models](./training/models) directory, differing by the sizes of filters used. The baseline U-Net is a similar version as used by the winner of the SpaceNet Building Footprint competition [XD\_XD](https://github.com/SpaceNetChallenge/BuildingDetectors_Round2/tree/master/1-XD_XD). We referenced several open source implementations, noted in the relevant files.
 
 Code for training the model is in the [pipeline](./pipeline) directory. The training script is `train.py` and all the paths to input/output, parameters and other arguments are specified in `train_config.py`, which you can modify and experiment with. The default configuration has `total_epochs` set to 15 to run training for 15 epochs, which takes about an hour in total on a VM with a P100 GPU (SKU NC6s_v2 on Azure). For the sample image above, the result of the segmentation model is as follows at epoch 3, 5, 7 and 10:
 
