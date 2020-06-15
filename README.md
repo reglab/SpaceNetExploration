@@ -103,5 +103,7 @@ SpaceNet [road extraction](https://spacenetchallenge.github.io/Competitions/Comp
 
 [Tutorial](https://github.com/Azure/pixel_level_land_classification) on pixel-level land cover classification using semantic segmentation in CNTK on Azure.
 
+Helpful [blog post](https://towardsdatascience.com/understanding-semantic-segmentation-with-unet-6be4f42d4b47) on understanding Semantic Segmentation with UNet
+
 
 
