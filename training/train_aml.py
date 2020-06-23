@@ -23,9 +23,9 @@ from utils.logger import Logger
 from utils.train_utils import AverageMeter, log_sample_img_gt, render
 
 """
-train.py
+train_aml.py
 
-It requires train_config.py to be in the path.
+It requires train_single_gpu_config.py to be in the path.
 
 Adapted from https://github.com/pytorch/examples/blob/master/imagenet/main.py
 """

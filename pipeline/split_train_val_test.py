@@ -12,7 +12,7 @@ import shutil
 # as it creates mask annotations from polygon labels, because that process only split the data after smaller chips are created from larger, raw images with some overlap.
 
 
-root_path = '~/building_extraction/raw_data/'
+root_path = '/content/drive/My Drive/space-net-exploration/data/raw/'
 
 image_dir_path = os.path.join(root_path, 'AOI_2_Vegas_Train', 'RGB-PanSharpen')
 label_dir_path = os.path.join(root_path, 'AOI_2_Vegas_Train', 'geojson', 'buildings')
@@ -53,9 +53,9 @@ splits['test'] = images_labels[train_len + val_len:]
 print('Resulting in {} train examples, {} val examples, {} test examples'.format(len(splits['train']), len(splits['val']), len(splits['test'])))
 
 # create dirs
-train_path = os.path.join(root_path, 'Vegas_processed_train')
-val_path = os.path.join(root_path, 'Vegas_processed_val')
-test_path = os.path.join(root_path, 'Vegas_processed_test')
+train_path = os.path.join(root_path, 'Vegas_train')
+val_path = os.path.join(root_path, 'Vegas_val')
+test_path = os.path.join(root_path, 'Vegas_test')
 
 outputs = {}
 outputs['train_label'] = os.path.join(train_path, 'geojson', 'buildings')

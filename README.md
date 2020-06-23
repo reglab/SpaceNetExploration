@@ -11,7 +11,7 @@ The blog post that first announced this sample project is [here](https://azure.m
 ## Data
 
 ### SpaceNet Building Footprint Extraction Dataset
-The code in this repository was developed for training a semantic segmentation model (currently two variants of the U-Net are implemented) on the Vegas set of the SpaceNet building footprint extraction [data](https://spacenet.ai/las-vegas/). Subsetting to just Vegas makes the sample code clearer, but it can be easily extended to take in training data from the four other locations.
+The code in this repository was developed for training a semantic segmentation model (currently two variants of the U-Net are implemented) on the Vegas set of the SpaceNet building footprint extraction [data](https://spacenet.ai/las-vegas/). Instruction for downloading the SpaceNet data can be found on their [website](https://spacenet.ai/datasets/). Subsetting to just Vegas makes the sample code clearer, but it can be easily extended to take in training data from the four other locations.
 
 The above link will have the latest documentation. As of 2020-06-15, the following worked for me:
 
@@ -27,7 +27,11 @@ The organizers release a portion of this data as training data and the rest are 
 
 
 ### Generate Input from Raw Data
-Instruction for downloading the SpaceNet data can be found on their [website](https://spacenet.ai/datasets/). The authors provide a set of utilities to convert the raw images to a format that semantic segmentation models can take as input. The utilities are in this [repo](https://github.com/SpaceNetChallenge/utilities). Most of the functionalities you will need are in the `python` folder. Please read their instructions on the repo's [README](https://github.com/SpaceNetChallenge/utilities) to understand all the tools and parameters available. After using `python/createDataSpaceNet.py` from the utilities repo to process the raw data, the input image and its label look like the following:
+After downloading the raw data (for example at RegLab, we have the raw data stored in this [Google Drive Folder; space-net-exploration/data/raw](https://drive.google.com/drive/u/1/folders/1_HovyjYtnHXDlTQUXomlvGmpS95_EFtB)), you will need to run [split_train_val_test.py](pipeline/split_train_val_test.py).
+
+This is necessary even though the SpaceNet utilities code also splits the data into trainval and test as it creates mask annotations from polygon labels, because that process only split the data after smaller chips are created from larger, raw images with some overlap.
+
+Next, we will need to use the SpaceNet utilities to convert the raw images to a format that semantic segmentation models can take as input. The utilities are in this [repo](https://github.com/reglab/utilities). Most of the functionalities you will need are in the `python` folder. Specifically, you will need to run [createDataSpaceNet.py](https://github.com/reglab/utilities/blob/1f58a49fb0ef61817f07e61b0d5b48995ff28154/spacenetutilities/scripts/createDataSpaceNet.py). Please read their instructions on the repo's [README](https://github.com/reglab/utilities) to understand all the tools and parameters available. After using `createDataSpaceNet.py` from the utilities repo to process the raw data, the input image and its label look like the following:
 
 ![Example of input image and its label](./visuals/sample_input_pair.png)
 
@@ -35,7 +39,9 @@ Instruction for downloading the SpaceNet data can be found on their [website](ht
 ## Environment Setup
 
 ### AWS Command Line Interface to Get Data
-The original data can be found in the [SpaceNet Challenge](https://spacenet.ai/las-vegas/). To download the data requires AWS command line tools. See the AWS [docs](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2-mac.html) for more info.
+The original data can be found in the [SpaceNet Challenge](https://spacenet.ai/las-vegas/). To download the data requires AWS command line tools.
+
+Note, to download AWS Command line tools, see the AWS [docs](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2-mac.html) for more info.
 
 
 ### Google Colab
@@ -44,6 +50,23 @@ We will be using [Google Colab Notebooks](https://colab.research.google.com/note
 1. It's free! (Including GPU)
 2. With Stanford account, we have unlimited Google Drive storage. Thus, we can upload large datasets into Google Drive which we can hook into Google Colab notebooks for easy exploration.
 3. Okay-ish development environment
+
+Note, we're keeping track of which folders in Google Drive are fully uploaded, since this is a lot of data and uploading to Google Drive in bulk seems to bug out.
+
+- AOI_2_Vegas_Test_public
+    - MUL (done! 1,282 items)
+    - MUL-PanSharpen (in progress! as of 2020-06-23; 1,188 out of 1,282 items)
+    - PAN (done! as of 2020-06-19; 1,282 items)
+    - RGB-PanSharpen (in progress! as of 2020-06-19; 990 out of 1,282 items)
+
+- AOI_2_Vegas_Train
+    - geojson (done!)
+        - buildings (done! 3,851 items)
+    - MUL (done! 3,851 items)
+    - MUL-PanSharpen (done! 3,851 items)
+    - PAN (done! 3,851 items)
+    - RGB-PanSharpen (done! 3,851 items)
+    - summaryData (done! 1 item)
 
 
 ### Additional Packages to Install
@@ -60,6 +83,42 @@ We will be using Google Drive to store data for this tutorial. This is because S
 
 Link to [Google Drive Folder](https://drive.google.com/drive/u/1/folders/104bv1Sn7UTaA4Y7A3xzQMwwcdGpH6ByV)
 
+
+### Bugs/Errors
+When initially running, this:
+
+```
+!python utilities/spacenetutilities/scripts/createDataSpaceNet.py /content/drive/My\ Drive/space-net-exploration/data/raw/AOI_2_Vegas_Train/ \
+           --srcImageryDirectory RGB-PanSharpen \
+           --outputDirectory data/processed/ \
+           --annotationType PASCALVOC2012 \
+           --imgSizePix 256
+```
+
+I was getting the following error:
+
+```
+Traceback (most recent call last):
+  File "utilities/spacenetutilities/scripts/createDataSpaceNet.py", line 324, in <module>
+    bboxResize= args.boundingBoxResize
+  File "utilities/spacenetutilities/scripts/createDataSpaceNet.py", line 89, in processChipSummaryList
+    bboxResize=bboxResize
+  File "/content/drive/My Drive/space-net-exploration/utilities/spacenetutilities/labeltools/pascalVOCLabel.py", line 212, in geoJsonToPASCALVOC2012
+    borderValue=255
+  File "/content/drive/My Drive/space-net-exploration/utilities/spacenetutilities/labeltools/pascalVOCLabel.py", line 117, in geoJsonToPASCALVOC2012SegmentCls
+    source_layer = gpd.read_file(geoJson)
+  File "/usr/local/lib/python3.6/dist-packages/geopandas/io/file.py", line 89, in read_file
+    with reader(path_or_bytes, **kwargs) as features:
+  File "/usr/local/lib/python3.6/dist-packages/fiona/env.py", line 398, in wrapper
+    return f(*args, **kwargs)
+  File "/usr/local/lib/python3.6/dist-packages/fiona/__init__.py", line 250, in open
+    path = parse_path(fp)
+  File "/usr/local/lib/python3.6/dist-packages/fiona/path.py", line 132, in parse_path
+    elif path.startswith('/vsi'):
+AttributeError: 'list' object has no attribute 'startswith'
+```
+
+which is similar to the issue already filed [here](https://github.com/SpaceNetChallenge/utilities/issues/117).
 
 
 ## Model Training
