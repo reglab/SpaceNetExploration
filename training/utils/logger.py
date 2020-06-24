@@ -14,14 +14,16 @@ class Logger(object):
     def __init__(self, split, log_dir, aml_run):
         """Create a summary writer logging to log_dir."""
         log_dir = os.path.join(log_dir, split)
-        self.writer = tf.summary.FileWriter(log_dir)
+        tf.compat.v1.disable_eager_execution()
+        self.writer = tf.compat.v1.summary.FileWriter(log_dir)
+        # self.writer = tf.summary.create_file_writer(log_dir)
 
         self.split = split
         self.aml_run = aml_run
 
     def scalar_summary(self, tag, value, step):
         """Log a scalar variable."""
-        summary = tf.Summary(value=[tf.Summary.Value(tag=tag, simple_value=value)])
+        summary = tf.compat.v1.Summary(value=[tf.compat.v1.Summary.Value(tag=tag, simple_value=value)])
         self.writer.add_summary(summary, step)
 
         self.aml_run.log('{}/{}'.format(self.split, tag), value)
@@ -41,14 +43,14 @@ class Logger(object):
             im.save(s, format='png')
 
             # Create an Image object
-            img_summary = tf.Summary.Image(encoded_image_string=s.getvalue(),
+            img_summary = tf.compat.v1.Summary.Image(encoded_image_string=s.getvalue(),
                                        height=img_np.shape[0],
                                        width=img_np.shape[1])
             # Create a Summary value
-            img_summaries.append(tf.Summary.Value(tag='%s/%d' % (tag, i), image=img_summary))
+            img_summaries.append(tf.compat.v1.Summary.Value(tag='%s/%d' % (tag, i), image=img_summary))
 
         # Create and write Summary
-        summary = tf.Summary(value=img_summaries)
+        summary = tf.compat.v1.Summary(value=img_summaries)
         self.writer.add_summary(summary, step)
 
     def histo_summary(self, tag, values, step, bins=1000):
@@ -58,7 +60,7 @@ class Logger(object):
         counts, bin_edges = np.histogram(values, bins=bins)
 
         # Fill the fields of the histogram proto
-        hist = tf.HistogramProto()
+        hist = tf.compat.v1.HistogramProto()
         hist.min = float(np.min(values))
         hist.max = float(np.max(values))
         hist.num = int(np.prod(values.shape))
@@ -75,6 +77,6 @@ class Logger(object):
             hist.bucket.append(c)
 
         # Create and write Summary
-        summary = tf.Summary(value=[tf.Summary.Value(tag=tag, histo=hist)])
+        summary = tf.compat.v1.Summary(value=[tf.compat.v1.Summary.Value(tag=tag, histo=hist)])
         self.writer.add_summary(summary, step)
         self.writer.flush()

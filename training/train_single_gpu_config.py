@@ -1,6 +1,6 @@
 import torch
 
-# for explanation also see comments in train.py, top part of file
+# for explanation also see comments in train_aml.py, top part of file
 
 TRAIN = {
     # hardware and framework parameters

@@ -50,7 +50,7 @@ class SpaceNetDataset(Dataset):
         return len(self.image_list)
 
     def __getitem__(self, idx):
-        img_path = os.path.join(self.root_dir, 'annotations', self.image_list[idx])
+        img_path = os.path.join(self.root_dir, 'RGB-PanSharpen', self.image_list[idx])
         target_path = os.path.join(self.root_dir, 'annotations', img_path.replace('.jpg', 'segcls.png'))
 
         image = np.array(Image.open(img_path))

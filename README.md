@@ -55,9 +55,9 @@ Note, we're keeping track of which folders in Google Drive are fully uploaded, s
 
 - AOI_2_Vegas_Test_public
     - MUL (done! 1,282 items)
-    - MUL-PanSharpen (in progress! as of 2020-06-23; 1,188 out of 1,282 items)
-    - PAN (done! as of 2020-06-19; 1,282 items)
-    - RGB-PanSharpen (in progress! as of 2020-06-19; 990 out of 1,282 items)
+    - MUL-PanSharpen (done! 1,282 items)
+    - PAN (done! 1,282 items)
+    - RGB-PanSharpen (done! 1,282 items)
 
 - AOI_2_Vegas_Train
     - geojson (done!)
@@ -85,6 +85,8 @@ Link to [Google Drive Folder](https://drive.google.com/drive/u/1/folders/104bv1S
 
 
 ### Bugs/Errors
+
+#### Pre-processing
 When initially running, this:
 
 ```
@@ -119,6 +121,17 @@ AttributeError: 'list' object has no attribute 'startswith'
 ```
 
 which is similar to the issue already filed [here](https://github.com/SpaceNetChallenge/utilities/issues/117).
+
+#### Google Drive Timeouts
+Working in collab, I would sometimes get errors like ["A Google Drive timeout has occurred (most recently at HH:MM:SS)"](https://research.google.com/colaboratory/faq.html#drive-timeout). This most often happened to me when training the model:
+
+```
+!python training/train_aml.py \
+           --experiment_name first-test \
+           --out_dir /content/drive/My\ Drive/space-net-exploration/models/
+```
+
+So far, I've had some success to re-running as failed attempts cache partial state locally before timing out. If you continue to encounter this issue, it has to do with the number of files or subfolders in a folder growing too large. Their recommended solution is to try moving files and oflders directly contained in "My Drive" into sub-folders.
 
 
 ## Model Training
