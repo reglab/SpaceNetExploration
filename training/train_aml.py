@@ -114,6 +114,7 @@ def get_sample_images(which_set='train'):
         image_tensors = batch['image']
         images = batch['image'].cpu().numpy()
         break  # take the first shuffled batch
+
     images_li = []
     for b in range(0, images.shape[0]):
         images_li.append(images[b, :, :, :])
@@ -145,6 +146,7 @@ def weights_init(m):
 
 
 def train(loader_train, model, criterion, optimizer, epoch, step, logger_train):
+    print('In Training')
     for t, data in enumerate(loader_train):
         # put model to training mode; we put it in eval mode in visualize_result_on_samples for every print_every
         model.train()
