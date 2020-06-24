@@ -4,6 +4,7 @@ import warnings
 
 import numpy as np
 from PIL import Image
+import torch
 from torch.utils.data import Dataset
 
 
@@ -51,12 +52,21 @@ class SpaceNetDataset(Dataset):
 
     def __getitem__(self, idx):
         img_path = os.path.join(self.root_dir, 'RGB-PanSharpen', self.image_list[idx])
-        target_path = os.path.join(self.root_dir, 'annotations', img_path.replace('.jpg', 'segcls.png'))
+        target_path = os.path.join(self.root_dir, 'annotations', self.image_list[idx].replace('.tif', 'segcls.tif'))
 
-        image = np.array(Image.open(img_path))
-        target = np.array(Image.open(target_path))
+        image = np.array(Image.open(img_path)).astype(np.int)
+        target = np.array(Image.open(target_path)).astype(np.int)
+        
+        # print('BEFORE converting target to building interior and border')
+        # print('Printing unique values of target: {}'.format(np.unique(target)))
+
         target[target == 100] = 1  # building interior
         target[target == 255] = 2  # border
+        target[target == 99] = 0 # Self Added by Vincent (Not sure what 99 is?)
+        target[target == 256] = 0 # Self Added by Vincent (Not sure what 99 is?)
+
+        # print('POST converting target to building interior and border')
+        # print('Printing unique values of target: {}'.format(np.unique(target)))
 
         sample = {'image': image, 'target': target, 'image_name': self.image_list[idx]}
 
