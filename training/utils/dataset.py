@@ -63,7 +63,7 @@ class SpaceNetDataset(Dataset):
         target[target == 100] = 1  # building interior
         target[target == 255] = 2  # border
         target[target == 99] = 0 # Self Added by Vincent (Not sure what 99 is?)
-        target[target == 256] = 0 # Self Added by Vincent (Not sure what 99 is?)
+        target[target == 256] = 0 # Self Added by Vincent (Not sure what 256 is?)
 
         # print('POST converting target to building interior and border')
         # print('Printing unique values of target: {}'.format(np.unique(target)))

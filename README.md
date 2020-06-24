@@ -35,6 +35,8 @@ Next, we will need to use the SpaceNet utilities to convert the raw images to a 
 
 ![Example of input image and its label](./visuals/sample_input_pair.png)
 
+For more examples of processed labels, see [this Google Drive Folder](https://drive.google.com/drive/u/1/folders/10FHoc2ly9ppKUmkvdxaOvj5EIO8aCsJw)
+
 
 ## Environment Setup
 
@@ -131,7 +133,7 @@ Working in collab, I would sometimes get errors like ["A Google Drive timeout ha
            --out_dir /content/drive/My\ Drive/space-net-exploration/models/
 ```
 
-So far, I've had some success to re-running as failed attempts cache partial state locally before timing out. If you continue to encounter this issue, it has to do with the number of files or subfolders in a folder growing too large. Their recommended solution is to try moving files and oflders directly contained in "My Drive" into sub-folders.
+So far, I've had some success just simply re-running. The reason re-running works is because failed attempts cache partial state locally before timing out. If you continue to encounter this issue, it has to do with the number of files or subfolders in a folder growing too large. [Their recommended solution](https://research.google.com/colaboratory/faq.html#drive-timeout) is to try moving files and oflders directly contained in "My Drive" into sub-folders.
 
 
 ## Model Training
